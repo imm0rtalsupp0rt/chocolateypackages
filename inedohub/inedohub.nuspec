@@ -3,12 +3,12 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>inedohub</id>
-    <version>1.4.1</version>
+    <version>1.4.4</version>
     <title>inedohub (Install)</title>
     <authors>Inedo</authors>
     <owners>imm0rtalsupp0rt</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <licenseUrl></licenseUrl>
+    <licenseUrl>https://inedo.com/proget/license-agreement</licenseUrl>
     <projectUrl>https://docs.inedo.com/docs/installation/windows/desktophub-overview</projectUrl>
     <iconUrl>https://cdn.jsdelivr.net/gh/imm0rtalsupp0rt/chocolateypackages@af320c55d8873687808a8d7089dbbbbe13d95f49/inedohub/tools/inedo-icon.svg</iconUrl>
     <tags>inedohub SPACE_SEPARATED</tags>
