@@ -11,7 +11,7 @@
     <licenseUrl>https://inedo.com/proget/license-agreement</licenseUrl>
     <projectUrl>https://docs.inedo.com/docs/installation/windows/desktophub-overview</projectUrl>
     <iconUrl>https://cdn.jsdelivr.net/gh/imm0rtalsupp0rt/chocolateypackages@af320c55d8873687808a8d7089dbbbbe13d95f49/inedohub/tools/inedo-icon.svg</iconUrl>
-    <tags>inedohub SPACE_SEPARATED</tags>
+    <tags>inedohub</tags>
     <summary>The Inedo Hub is used to install ProGet, BuildMaster, and Otter on Windows.</summary>
     <releaseNotes></releaseNotes>
     <packageSourceUrl>https://github.com/imm0rtalsupp0rt/chocolateypackages/tree/main/inedohub</packageSourceUrl>

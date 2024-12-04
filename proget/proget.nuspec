@@ -7,7 +7,7 @@
     <authors>Inedo</authors>
     <owners>imm0rtalsupp0rt</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <licenseUrl></licenseUrl>
+    <licenseUrl>https://inedo.com/proget/license-agreement</licenseUrl>
     <projectUrl>https://inedo.com/proget</projectUrl>
     <iconUrl>https://cdn.jsdelivr.net/gh/imm0rtalsupp0rt/chocolateypackages@af320c5/proget/tools/proget-icon.svg</iconUrl>
     <description>
@@ -28,12 +28,12 @@
       - `/UserPassword` - The password of the user account specified with the UserAccount parameter. Ignored if using LocalSystem or NetworkService. There is no default value.
       - `/IsUpgrade` - When true, services will not be created. Defaults to `false`.
     </description>
-    <summary>Look at the Overview page for ProGet itself.</summary>
-    <releaseNotes>https://my.inedo.com/downloads/issues?product=ProGet&fromVersion=24.0.20&toVersion=24.0.20</releaseNotes>
+    <summary>Keep all your packages and Docker containers in one place, scan for vulnerabilities, and control who can access different feeds. ProGet installs in minutes and has a powerful free version with a lot of great features that you can upgrade when ready.</summary>
+    <releaseNotes></releaseNotes>
     <packageSourceUrl>https://github.com/imm0rtalsupp0rt/chocolateypackages/tree/main/proget</packageSourceUrl>
     <docsUrl>https://docs.inedo.com/docs/proget/overview</docsUrl>
     <bugTrackerUrl>https://forums.inedo.com/</bugTrackerUrl>
-    <tags>proget SPACE_SEPARATED</tags>
+    <tags>proget inedohub</tags>
     <dependencies>
       <dependency id="inedohub" />
     </dependencies>
