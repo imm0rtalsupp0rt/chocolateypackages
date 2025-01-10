@@ -47,24 +47,22 @@ function global:au_GetLatest {
     $LatestRelease = Get-InedoHubInstaller
 
     @{
-        Url       = $LatestRelease.url
+        Url       = 'https://proget.inedo.com/upack/Products/download/InedoReleases/DesktopHub/{0}?contentOnly=zip' -f $LatestRelease.Version
         Version      = $LatestRelease.version
-        ReleaseNotes = $LatestRelease.html_url
+        Checksum  = $LatestRelease.Checksum
+        ChecksumType = $LatestRelease.ChecksumType
     }
 }
 
 function global:au_SearchReplace {
     @{
-        ".\tools\chocolateyInstall.ps1" = @{
-            "(?i)(^\s*(\$)url64\s*=\s*)('.*')"      = "`$1'$($Latest.Url)'"
+        ".\tools\chocolateyinstall.ps1" = @{
+            "(?i)(^\s*(\$)url\s*=\s*)('.*')"      = "`$1'$($Latest.URL)'"
             "(?i)(^\s*checksum\s*=\s*)('.*')"     = "`$1'$($Latest.Checksum)'"
-            "(?i)(^\s*checksumType\s*=\s*)('.*')" = "`$1'$($Latest.ChecksumType)'"
+            #"(?i)(^\s*checksum64\s*=\s*)('.*')"       = { "$1'$($Latest.Checksum64)'" }
         }
 
-        "elk-native.nuspec" = @{
-            "(\<version\>).*?(\</version\>)" = "`$1$($Latest.version)`$2"
-        }
     }
 }
 
-update -ChecksumFor 32
+update -ChecksumFor 32 -NoCheckChocoVersion
