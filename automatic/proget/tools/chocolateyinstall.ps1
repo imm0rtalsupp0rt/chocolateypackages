@@ -22,6 +22,10 @@ if (-not $PackageParameters['ConnectionString']) {
     $PackageParameters['ConnectionString'] = 'Data Source=Localhost\SQLEXPRESS;Trusted_Connection=true;'
 }
 
+if(-not $PackageParameters['WebServerPrefixes']){
+    $WebServerPrefixes = '8624'
+}
+
 switch ($PackageParameters.Keys) {
     "ConnectionString" {
         $installArgs += "--ConnectionString=`"$($PackageParameters['ConnectionString'])`""
@@ -41,12 +45,8 @@ switch ($PackageParameters.Keys) {
 
     "WebServerPrefixes" {
         # Specifies the URL which is used by the integrated web server. Ignored if UseIntegratedWebServer is not true.
-        $WebServerPrefixes = if (-not $PackageParameters["WebServerPrefixes"]) {
-            "8624"
-        }
-        else {
-            $PackageParameters["WebServerPrefixes"]
-        }
+        $WebServerPrefixes = $PackageParameters["WebServerPrefixes"] 
+  
         $installArgs += "--WebServerPrefixes=$($WebServerPrefixes)"
         # default value: http://*:8624/
     }
