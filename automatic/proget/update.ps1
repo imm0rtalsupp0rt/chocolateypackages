@@ -1,41 +1,51 @@
-#Variables
-$root = Split-Path -parent $MyInvocation.MyCommand.Definition
-$nuspec = Join-Path $root -ChildPath 'proget.nuspec'
 #functions
-function Get-ProGetMetadata {
-    [CmdletBinding()]
+function Get-ProGetInstallerMetaData {
+    [Cmdletbinding()]
     Param(
+        # URL of the InedoHub download page
         [Parameter()]
         [String]
-        $url = "https://my.inedo.com/downloads/installers?Product=ProGet"
+        $url = "https://proget.inedo.com/upack/Products/download/InedoReleases/ProGet?contentOnly=zip&latest"
     )
-    #Go fetch the page HTML
-    $response = Invoke-WebRequest -Uri $url -UseBasicParsing
 
-    #Parse and capture the table with all the data
-    $Null = $response.Content -match '(?<table><table.*?>(.*?)<\/table>)'
-    $table = $Matches.table
+    end {
+        #Download the installer using an HttpClient so it's fast
+        $client = [System.Net.Http.HttpClient]::new()
+        $response = $client.GetAsync($url).Result
+        #Get the file bytes so we can write it the file to disk
+        $contentBytes = $response.Content.ReadAsByteArrayAsync().Result
 
-    #Capture the first row of the table, that's all we care about
-    $rowMatcher = '(?<row><tr[^>]*>((?!<th>).)*?<\/tr>)'
-    $null = $table -match $rowMatcher
-    $rows = $matches.row
+        #We capture the filename to use by inspecting the Content-Disposition Header
+        $matcher = '(?<filename>(?<=filename=")[^"]+(?="))'
+        $null = ($response.content.Headers.GetEnumerator() | Where-Object Key -eq 'Content-Disposition' | Select-Object -ExpandProperty Value) -match $matcher
+        $fileName = $matches.filename
+        #Save the installer to disk using the filename and the bytes from the download
+        $filepath = Join-Path $pwd -ChildPath $fileName
+        $file = [System.IO.FileStream]::new($filepath, [System.IO.FileMode]::Create)
+        $file.write($contentBytes, 0, $contentBytes.Length)
+        $file.close()
 
-    #parse the row for actual values'
-    $regex = '<tr[^>]*>\s*<td[^>]*>[^<]*<\/td>\s*<td[^>]*><a[^>]*>(?<version>.*?)<\/a><\/td>\s*<td[^>]*>.*?<\/td>\s*<td[^>]*><a[^>]*href="(?<downloadUrl>[^"]*cdn\.inedo\.com[^"]*)".*?<\/a>.*?<\/td>'
-    $null = $rows -match $regex
+        #Return some data
+        $version = (($response.Headers.GetEnumerator() | Where-Object Key -eq 'X-upack-id' | Select-Object -expand Value) -split ':')[-1]
+        $fileHash = (Get-FIleHash $filepath -Algorithm SHA256).Hash
+        $checksumType = 'SHA256'
 
-    $Version = $Matches.version
-    $downloadUrl = $Matches.downloadUrl
-
-    [PSCustomObject]@{
-        Version     = $version.Trim()
-        DownloadUrl = $downloadUrl.Trim()
+        [pscustomObject]@{
+            Filename     = $fileName
+            Filepath     = $filepath
+            Version      = $version
+            Checksum     = $fileHash
+            ChecksumType = $checksumType
+            Url          = $url
+        }
+        
+        Remove-Item $filepath
     }
+
 }
 
 function global:au_GetLatest {
-    $LatestRelease = Get-ProGetMetadata
+    $LatestRelease = Get-ProGetInstallerMetaData
 
     @{
         Version      = $LatestRelease.version
@@ -44,12 +54,12 @@ function global:au_GetLatest {
 
 function global:au_SearchReplace {
     @{
-        "proget.nuspec" = @{
-            "(\<version\>).*?(\</version\>)" = "`$1$($Latest.version)`$2"
+        ".\tools\chocolateyinstall.ps1" = @{
+            "(?i)(^\s*(\$)version\s*=\s*)('.*')"      = "`$1'$($Latest.Version)'"
         }
+
     }
 }
 
 #Execution
-Write-Host "Updating: $nuspec" -ForegroundColor Yellow
-update -ChecksumFor none -NoReadme
+update -ChecksumFor none

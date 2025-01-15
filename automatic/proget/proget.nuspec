@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>proget</id>
-    <version>24.0.1</version>
+    <version>24.0.4</version>
     <title>proget (Install)</title>
     <authors>Inedo</authors>
     <owners>imm0rtalsupp0rt</owners>
@@ -18,7 +18,7 @@
       ## Package Parameters
 
       - `/TargetDirectory` - The root install directory for ProGet. Defaults to `$PathCombine($SpecialWindowsPath(ProgramFiles), ProductName)`.
-      - `/ConnectionString` - Connection string used to create and initialize the database schema. There is no default value and must be passed at runtime.
+      - `/ConnectionString` - Connection string used to create and initialize the database schema. Defaults to `'Data Source=Localhost\SQLEXPRESS;Trusted_Connection=true;'`
       - `/DbName` - Name of the SQL database to use or create. This overrides any Initial Catalog specified in the connection string. Defaults to `ProGet`.
       - `/WebServerPrefixes` - Specifies the URL and port used by the integrated web server. Defaults to `http://*:8624`.
       - `/ExtensionsPath` - Specifies the directory where user-installed ProGet extensions will be stored. Defaults to `$PathCombine($SpecialWindowsPath(CommonApplicationData), ProductName, Extensions)`.
@@ -36,6 +36,8 @@
     <tags>proget inedohub</tags>
     <dependencies>
       <dependency id="inedohub" />
+      <dependency id="sql-server-express" />
+
     </dependencies>
   </metadata>
 </package>
